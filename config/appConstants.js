@@ -4,6 +4,11 @@ module.exports = {
             CUSTOMER: 'Customer',
             SERVICE_PROVIDER: 'ServiceProvider',
             ADMIN: 'Admin'
+        },
+        USER_STATUS: {
+            PENDING: 'Pending',
+            APPROVED: 'Approved',
+            REJECTED: 'Rejected'
         }
     }
 }
