@@ -97,10 +97,10 @@ module.exports = (sequelize, DataTypes) => {
 
     // Associations
     users.associate = function (models) {
-        // participant_cards
-        //users.hasOne(models.participant_cards, { as: "participant_card", foreignKey: "card_id", sourceKey: "card_id", onDelete: "RESTRICT" });
-        // clipper_export_batch_cards
-        //users.hasMany(models.clipper_export_batch_cards, { as: "clipper_batch_cards", foreignKey: "card_id", sourceKey: "card_id", onDelete: "RESTRICT" });
+        // addrese
+        users.hasMany(models.address, { as: "addresses", foreignKey: "userId", sourceKey: "id", onDelete: "RESTRICT" });
+        // tailor categories
+        users.hasMany(models.tailorCategories, { as: "tailorCategories", foreignKey: "tailorId", sourceKey: "id", onDelete: "RESTRICT" });
     };
 
     // hooks

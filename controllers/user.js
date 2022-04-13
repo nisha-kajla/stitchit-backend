@@ -194,6 +194,24 @@ const updateUser = async (req, res) => {
     }
 };
 
+const listUsers = async (req, res) => {
+    try {
+        const { user, query, sort, pagination } = req;
+
+        const { count, rows } = await db.users.getListByCriteria(query, sort, pagination)
+
+        responseManager.sendResponse(res, 200, new SDKResult(true, {
+            data: {
+                count,
+                result: rows
+            }
+        }));
+    } catch (err) {
+        responseManager.handleError(res, err);
+    }
+};
+
+
 const addAddress = async (req, res) => {
     try {
         const { body, user } = req;
@@ -295,6 +313,88 @@ const deleteAddress = async (req, res) => {
 };
 
 
+// tailor categories
+const addTailorCategory = async (req, res) => {
+    try {
+        const { body, user } = req;
+        if (!body.categoryId) {
+            throw new ValidationError(`'categoryId' required`)
+        }else if (!body.minPrice) {
+            throw new ValidationError(`'minPrice' required`)
+        } else if (!body.maxPrice) {
+            throw new ValidationError(`'maxPrice' required`)
+        }
+
+        // create in db
+        const category = await db.tailorCategories.create({ ...body, tailorId: user.id });
+
+        responseManager.sendResponse(res, 200, new SDKResult(true, {
+            data: category
+        }));
+    } catch (err) {
+        responseManager.handleError(res, err);
+    }
+};
+
+const editTailorCategory = async (req, res) => {
+    try {
+        const { body, user, params } = req;
+
+        let existingTailorCategory = await db.tailorCategories.getOneByCriteria({
+            id: params.tailorCategoryId
+        });
+
+        if (!existingTailorCategory || !existingTailorCategory.id) {
+            throw new ValidationError(`invalid category`)
+        }
+
+        // update category in db
+        existingTailorCategory = await existingTailorCategory.update(body);
+
+        responseManager.sendResponse(res, 200, new SDKResult(true, {
+            data: existingTailorCategory
+        }));
+    } catch (err) {
+        responseManager.handleError(res, err);
+    }
+};
+
+const listTailorCategory = async (req, res) => {
+    try {
+        const { user, query, sort, pagination } = req;
+
+        const { count, rows } = await db.tailorCategories.getListByCriteria(query, sort, pagination)
+
+
+        responseManager.sendResponse(res, 200, new SDKResult(true, {
+            data: {
+                count,
+                result: rows
+            }
+        }));
+    } catch (err) {
+        responseManager.handleError(res, err);
+    }
+};
+
+const deleteTailorCategory = async (req, res) => {
+    try {
+        const { params } = req;
+
+        await db.tailorCategories.destroy({
+            where: {
+                id: params.tailorCategoryId
+            }
+        });
+
+        responseManager.sendResponse(res, 200, new SDKResult(true, {
+            data: {}
+        }));
+    } catch (err) {
+        responseManager.handleError(res, err);
+    }
+};
+
 
 
 module.exports = {
@@ -303,8 +403,13 @@ module.exports = {
     profile,
     editProfile,
     updateUser,
+    listUsers,
     addAddress,
     editAddress,
     listAddresss,
-    deleteAddress
+    deleteAddress,
+    addTailorCategory,
+    editTailorCategory,
+    listTailorCategory,
+    deleteTailorCategory
 };

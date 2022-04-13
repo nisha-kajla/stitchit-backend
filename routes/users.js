@@ -19,10 +19,23 @@ router.get('/address/', auth.verify, user.listAddresss);
 router.delete('/address/:addressId', auth.verify, user.deleteAddress);
 
 router.use((req, res, next) => {
+  req.type = appConstants.ENUMS.USER_TYPE.SERVICE_PROVIDER;
+  next();
+});
+
+// tailor categories
+router.post('/category/', auth.verify, user.addTailorCategory);
+router.put('/category/:tailorCategoryId', auth.verify, user.editTailorCategory);
+router.get('/category/', auth.verify, user.listTailorCategory);
+router.delete('/category/:tailorCategoryId', auth.verify, user.deleteTailorCategory);
+
+
+router.use((req, res, next) => {
   req.type = appConstants.ENUMS.USER_TYPE.ADMIN;
   next();
 });
 
 router.put('/update/:userId', auth.verify, user.updateUser);
+router.get('/list', auth.verify, user.listUsers);
 
 module.exports = router;

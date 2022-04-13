@@ -42,7 +42,7 @@ const editCategory = async (req, res) => {
         }
 
         // update category in db
-        existingCategory = await existingCategory.update({ ...body, imageName: file ? file.filename : existingCategory.imageName});
+        existingCategory = await existingCategory.update({ ...body, imageName: file ? file.filename : existingCategory.imageName });
 
         responseManager.sendResponse(res, 200, new SDKResult(true, {
             data: existingCategory
@@ -57,6 +57,29 @@ const listCategory = async (req, res) => {
         const { user, query, sort, pagination } = req;
 
         const { count, rows } = await db.category.getListByCriteria(query, sort, pagination)
+
+
+        responseManager.sendResponse(res, 200, new SDKResult(true, {
+            data: {
+                count,
+                result: rows
+            }
+        }));
+    } catch (err) {
+        responseManager.handleError(res, err);
+    }
+};
+
+const listCategoryToAddForTailor = async (req, res) => {
+    try {
+        console.log('test')
+        const { user, query, sort, pagination } = req;
+
+        const { count, rows } = await db.category.getListByCriteria({
+            id: {
+                [OP.notIn]: await db.tailorCategories.getAlreadyAddedCategoryIds(user.id)
+            }
+        }, sort, pagination)
 
 
         responseManager.sendResponse(res, 200, new SDKResult(true, {
@@ -95,5 +118,6 @@ module.exports = {
     addCategory,
     editCategory,
     listCategory,
-    deleteCategory
+    deleteCategory,
+    listCategoryToAddForTailor
 };

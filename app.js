@@ -46,3 +46,9 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
+// admin
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInR5cGUiOiJBZG1pbiIsImlhdCI6MTY0OTg1NTIyNH0.Xz-V4flqLQNEtEy9MoSBAv8qHG7bbLxRwzBpxjHVQ7w
+
+// tailor
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInR5cGUiOiJTZXJ2aWNlUHJvdmlkZXIiLCJpYXQiOjE2NDk4NTc1Nzl9.db1kjBxdRbv6uZflI5pZsEvMoeyl7Cy-OyBKiF7iuGw
