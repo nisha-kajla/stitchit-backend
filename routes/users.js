@@ -11,6 +11,8 @@ router.post('/login', user.login);
 router.get('/', auth.verify, user.profile);
 router.put('/', auth.verify, file.upload.single('file'), user.editProfile);
 
+router.get('/tailors/:categoryId', auth.verify, user.listTailorsByCategory);
+
 // addresses
 
 router.post('/address/', auth.verify, user.addAddress);

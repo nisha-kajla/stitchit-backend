@@ -319,7 +319,7 @@ const addTailorCategory = async (req, res) => {
         const { body, user } = req;
         if (!body.categoryId) {
             throw new ValidationError(`'categoryId' required`)
-        }else if (!body.minPrice) {
+        } else if (!body.minPrice) {
             throw new ValidationError(`'minPrice' required`)
         } else if (!body.maxPrice) {
             throw new ValidationError(`'maxPrice' required`)
@@ -395,6 +395,35 @@ const deleteTailorCategory = async (req, res) => {
     }
 };
 
+const listTailorsByCategory = async (req, res) => {
+    try {
+        const { user, query, params, sort, pagination } = req;
+
+        if (!('lat' in query)) {
+            throw new ValidationError(`'lat' required`)
+        }
+        else if (!('long' in query)) {
+            throw new ValidationError(`'long' required`)
+        }
+        else if (!params.categoryId) {
+            throw new ValidationError(`categoryId' required`)
+        }
+
+        const { count, rows } = await db.tailorCategories.getTailorListByByCategory({ ...params, ...query }, sort, pagination)
+
+        responseManager.sendResponse(res, 200, new SDKResult(true, {
+            data: {
+                count,
+                result: rows
+            }
+        }));
+    } catch (err) {
+        console.log(err);
+        responseManager.handleError(res, err);
+    }
+};
+
+
 
 
 module.exports = {
@@ -411,5 +440,6 @@ module.exports = {
     addTailorCategory,
     editTailorCategory,
     listTailorCategory,
-    deleteTailorCategory
+    deleteTailorCategory,
+    listTailorsByCategory
 };

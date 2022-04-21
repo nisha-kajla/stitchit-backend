@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DECIMAL(5, 2),
             allowNull: true
         },
+        geoPoint: {
+            type: DataTypes.GEOMETRY('POINT'),
+            allowNull: true
+        },
         status: {
             type: DataTypes.ENUM([
                 ENUMS.USER_STATUS.PENDING,
@@ -66,6 +70,10 @@ module.exports = (sequelize, DataTypes) => {
                 ENUMS.USER_TYPE.CUSTOMER,
                 ENUMS.USER_TYPE.SERVICE_PROVIDER]),
             allowNull: false
+        },
+        distance: {
+            type: DataTypes.DECIMAL(5, 2),
+            allowNull: true
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -108,6 +116,13 @@ module.exports = (sequelize, DataTypes) => {
         user.password = hashPassword(user.password);
         user.email = user.email.toLowerCase().trim();
         user.status = user.type === ENUMS.USER_TYPE.SERVICE_PROVIDER ? ENUMS.USER_STATUS.PENDING : ENUMS.USER_STATUS.APPROVED;
+        user.geoPoint = { type: 'Point', coordinates: [user.long, user.lat]}
+    });
+
+    users.beforeUpdate(async (user, options) => {
+        if('long' in user && 'lat' in user){
+            user.geoPoint = { type: 'Point', coordinates: [user.long, user.lat]}
+        }
     });
 
     users.afterCreate(async (user, options) => {

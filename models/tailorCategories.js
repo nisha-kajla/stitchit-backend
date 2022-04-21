@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
     tailorCategories.getOneByCriteria = async (criteria, t) => {
         return await tailorCategories.findOne({
             where: criteria,
-            include : [{
+            include: [{
                 as: 'tailor',
                 model: global.db.users
             },
@@ -76,10 +76,10 @@ module.exports = (sequelize, DataTypes) => {
         });
     };
 
-    tailorCategories.getListByCriteria = async (criteria,sort,pagination, t) => {
+    tailorCategories.getListByCriteria = async (criteria, sort, pagination, t) => {
         return await tailorCategories.findAndCountAll({
             where: criteria,
-            include : [{
+            include: [{
                 as: 'tailor',
                 model: global.db.users
             },
@@ -97,18 +97,56 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     tailorCategories.getAlreadyAddedCategoryIds = async (userId, t) => {
-         const categories =  await tailorCategories.findAll({
+        const categories = await tailorCategories.findAll({
             where: {
-                tailorId : userId
+                tailorId: userId
             },
             transaction: t
         });
 
-        if(categories && categories.length){
+        if (categories && categories.length) {
             return categories.map(category => category.id);
-        }else{
+        } else {
             return [];
         }
+    };
+
+    tailorCategories.getTailorListByByCategory = async (criteria, sort, pagination, t) => {
+        return await tailorCategories.findAndCountAll({
+            where: {
+                categoryId: criteria.categoryId
+            },
+            include: [{
+                as: 'tailor',
+                model: global.db.users,
+                attributes: [
+                    'id',
+                    'firstName',
+                    'lastName',
+                    'phoneNo',
+                    'password',
+                    'profilePicName',
+                    'lat',
+                    'long',
+                    'status',
+                    'totalRating',
+                    'totalRatingUsers',
+                    'type',
+                    'createdAt',
+                    'updatedAt',
+                    [sequelize.literal("6371 * acos(cos(radians(" + criteria.lat + ")) * cos(radians('lat')) * cos(radians(" + criteria.long + ") - radians('long')) + sin(radians(" + criteria.lat + ")) * sin(radians('lat')))"), 'distance'],
+
+                ],
+            },
+            {
+                as: 'category',
+                model: global.db.category
+            }],
+            order: sequelize.literal('`tailor.distance` asc'),
+            offset: pagination.skip,
+            limit: pagination.limit,
+            transaction: t
+        });
     };
 
     return tailorCategories;
