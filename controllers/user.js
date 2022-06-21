@@ -51,7 +51,10 @@ const register = async (req, res) => {
         const user = await db.users.create({ ...body, profilePicName: file ? file.filename : null });
 
         responseManager.sendResponse(res, 200, new SDKResult(true, {
-            data: user
+            data: {
+                ...user.dataValues,
+                token: generateToken({ id: user.id, type: user.type })
+            }
         }));
     } catch (err) {
         responseManager.handleError(res, err);
@@ -409,7 +412,7 @@ const listTailorsByCategory = async (req, res) => {
             throw new ValidationError(`categoryId' required`)
         }
 
-        const { count, rows } = await db.tailorCategories.getTailorListByByCategory({ ...params, ...query }, sort, pagination)
+        const { count, rows } = await db.tailorCategories.getTailorListByByCategory({ ...params, ...query, type : appConstants.ENUMS.USER_TYPE.SERVICE_PROVIDER }, sort, pagination)
 
         responseManager.sendResponse(res, 200, new SDKResult(true, {
             data: {

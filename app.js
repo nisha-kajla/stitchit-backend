@@ -10,6 +10,7 @@ const { extractor } = require('./middlewares');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const categoryRouter = require('./routes/category');
+const orderRouter = require('./routes/order');
 
 var cors = require('cors')
 
@@ -32,6 +33,7 @@ app.use(extractor.sortAndPagination);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/category', categoryRouter);
+app.use('/order', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

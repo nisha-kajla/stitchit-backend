@@ -71,10 +71,6 @@ module.exports = (sequelize, DataTypes) => {
                 ENUMS.USER_TYPE.SERVICE_PROVIDER]),
             allowNull: false
         },
-        distance: {
-            type: DataTypes.DECIMAL(5, 2),
-            allowNull: true
-        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -107,6 +103,9 @@ module.exports = (sequelize, DataTypes) => {
     users.associate = function (models) {
         // addrese
         users.hasMany(models.address, { as: "addresses", foreignKey: "userId", sourceKey: "id", onDelete: "RESTRICT" });
+        // orders
+        users.hasMany(models.order, { as: "userOrders", foreignKey: "userId", sourceKey: "id", onDelete: "RESTRICT" });
+        users.hasMany(models.order, { as: "tailorOrders", foreignKey: "tailorId", sourceKey: "id", onDelete: "RESTRICT" });
         // tailor categories
         users.hasMany(models.tailorCategories, { as: "tailorCategories", foreignKey: "tailorId", sourceKey: "id", onDelete: "RESTRICT" });
     };

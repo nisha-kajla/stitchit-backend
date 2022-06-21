@@ -66,10 +66,10 @@ module.exports = (sequelize, DataTypes) => {
 
     // Associations
     address.associate = function (models) {
-        // participant_cards
-        //users.hasOne(models.participant_cards, { as: "participant_card", foreignKey: "card_id", sourceKey: "card_id", onDelete: "RESTRICT" });
-        // clipper_export_batch_cards
-        //users.hasMany(models.clipper_export_batch_cards, { as: "clipper_batch_cards", foreignKey: "card_id", sourceKey: "card_id", onDelete: "RESTRICT" });
+       // users
+       address.belongsTo(models.users, { as: "user", foreignKey: "userId", sourceKey: "id", onDelete: "RESTRICT" });
+       // orders
+       address.hasMany(models.order, { as: "orders", foreignKey: "userAddressId", sourceKey: "id", onDelete: "RESTRICT" });
     };
 
     // Methods
