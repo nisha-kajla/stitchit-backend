@@ -14,6 +14,7 @@ module.exports = {
             PENDING: 'Pending',
             AMOUNT_ADDEDD : 'Amount Added',
             AMOUNT_APPROVED_BY_USER : 'Amount Approved',
+            AMOUNT_REJECTED_BY_USER : 'Amount Rejected',
             ORDER_APPROVED_BY_TAILOR : 'Order Approved',
             MEASUREMENT_PENDING : 'Measurement Pending',
             MEASUREMENT_DONE : 'Measurement Done',

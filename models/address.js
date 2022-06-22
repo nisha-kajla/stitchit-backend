@@ -39,6 +39,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue  :false
         },
+        lat: {
+            type: DataTypes.DECIMAL(5, 2),
+            allowNull: true
+        },
+        long: {
+            type: DataTypes.DECIMAL(5, 2),
+            allowNull: true
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,

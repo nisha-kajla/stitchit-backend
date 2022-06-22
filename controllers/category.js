@@ -72,7 +72,6 @@ const listCategory = async (req, res) => {
 
 const listCategoryToAddForTailor = async (req, res) => {
     try {
-        console.log('test')
         const { user, query, sort, pagination } = req;
 
         const { count, rows } = await db.category.getListByCriteria({

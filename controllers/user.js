@@ -282,8 +282,7 @@ const editAddress = async (req, res) => {
 const listAddresss = async (req, res) => {
     try {
         const { user, query, sort, pagination } = req;
-
-        const { count, rows } = await db.address.getListByCriteria(query, sort, pagination)
+        const { count, rows } = await db.address.getListByCriteria({ userId: user.id }, sort, pagination)
 
 
         responseManager.sendResponse(res, 200, new SDKResult(true, {
@@ -299,11 +298,12 @@ const listAddresss = async (req, res) => {
 
 const deleteAddress = async (req, res) => {
     try {
-        const { params } = req;
+        const { user, params } = req;
 
         await db.address.destroy({
             where: {
-                id: params.addressId
+                id: params.addressId,
+                userId : user.id
             }
         });
 
@@ -366,7 +366,7 @@ const listTailorCategory = async (req, res) => {
     try {
         const { user, query, sort, pagination } = req;
 
-        const { count, rows } = await db.tailorCategories.getListByCriteria(query, sort, pagination)
+        const { count, rows } = await db.tailorCategories.getListByCriteria({tailorId : user.id}, sort, pagination)
 
 
         responseManager.sendResponse(res, 200, new SDKResult(true, {
@@ -412,7 +412,7 @@ const listTailorsByCategory = async (req, res) => {
             throw new ValidationError(`categoryId' required`)
         }
 
-        const { count, rows } = await db.tailorCategories.getTailorListByByCategory({ ...params, ...query, type : appConstants.ENUMS.USER_TYPE.SERVICE_PROVIDER }, sort, pagination)
+        const { count, rows } = await db.tailorCategories.getTailorListByByCategory({ ...params, ...query, type: appConstants.ENUMS.USER_TYPE.SERVICE_PROVIDER }, sort, pagination)
 
         responseManager.sendResponse(res, 200, new SDKResult(true, {
             data: {

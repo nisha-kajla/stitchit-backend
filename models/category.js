@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         return await category.findAndCountAll({
             where: criteria,
             order: [
-                [sort.sortBy, sort.sortOrder]
+                ['name', 'asc']
             ],
             offset: pagination.skip,
             limit: pagination.limit,

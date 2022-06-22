@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DECIMAL(5, 2),
             allowNull: true
         },
+        address: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         geoPoint: {
             type: DataTypes.GEOMETRY('POINT'),
             allowNull: true
