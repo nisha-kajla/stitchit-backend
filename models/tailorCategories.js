@@ -105,7 +105,7 @@ module.exports = (sequelize, DataTypes) => {
         });
 
         if (categories && categories.length) {
-            return categories.map(category => category.id);
+            return categories.map(category => category.categoryId);
         } else {
             return [];
         }

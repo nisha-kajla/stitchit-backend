@@ -73,7 +73,6 @@ const listCategory = async (req, res) => {
 const listCategoryToAddForTailor = async (req, res) => {
     try {
         const { user, query, sort, pagination } = req;
-
         const { count, rows } = await db.category.getListByCriteria({
             id: {
                 [OP.notIn]: await db.tailorCategories.getAlreadyAddedCategoryIds(user.id)
